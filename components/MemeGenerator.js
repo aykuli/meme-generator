@@ -2,19 +2,12 @@ import React, { Component } from 'react';
 import htmlToImage from 'html-to-image';
 
 export default class MemeGenerator extends Component {
-  constructor() {
-    super();
-    this.state = {
-      topTxt: '',
-      bottomTxt: '',
-      randomImg: 'http://i.imgflip.com/1bij.jpg',
-      allMemeImgs: [],
-    };
-
-    this.getRandomImg = this.getRandomImg.bind(this);
-    this.handleChange = this.handleChange.bind(this);
-    this.export = this.export.bind(this);
-  }
+  state = {
+    topTxt: '',
+    bottomTxt: '',
+    randomImg: 'https://i.imgflip.com/3m26ev.jpg',
+    allMemeImgs: [],
+  };
 
   componentDidMount() {
     fetch('https://api.imgflip.com/get_memes')
@@ -26,33 +19,33 @@ export default class MemeGenerator extends Component {
       });
   }
 
-  getRandomImg() {
+  getRandomImg = () => {
     const len = this.state.allMemeImgs.length;
-    const num = Math.round(Math.random() * len - 0.5);
+    const num = Math.floor(Math.random() * (len - 1));
     this.setState(prevState => {
       return {
         randomImg: prevState.allMemeImgs[num].url,
       };
     });
-  }
+  };
 
-  handleChange(e) {
+  handleChange = e => {
     const { name, value } = e.target;
     this.setState(() => {
       return {
         [name]: value,
       };
     });
-  }
+  };
 
-  export() {
-    htmlToImage.toJpeg(document.querySelector('.meme'), { quality: 0.95 }).then(function(dataUrl) {
+  export = () => {
+    htmlToImage.toJpeg(document.querySelector('.meme'), { quality: 1 }).then(function(dataUrl) {
       var link = document.createElement('a');
       link.download = 'image.jpeg';
       link.href = dataUrl;
       link.click();
     });
-  }
+  };
 
   render() {
     // prettier-ignore
